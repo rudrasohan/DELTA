@@ -1,4 +1,4 @@
-from openai import AzureOpenAI
+from openai import OpenAI
 from copy import deepcopy
 import os
 import tiktoken
@@ -8,8 +8,6 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-AZURE_API_KEY = os.getenv("AZURE_API_KEY")
-AZURE_ENDPOINT = os.getenv("AZURE_ENDPOINT")
 MAX_NEW_TOKENS = 16384
 
 
@@ -120,12 +118,7 @@ class GPT(LLMBase):
     def __init__(self, model_name: str, temp: float = 0., top_p: float = 1.):
         super().__init__(temp, top_p)
         self.model_id = model_name
-        self.key = AZURE_API_KEY
-        self.client = AzureOpenAI(
-            api_key=self.key,
-            api_version="2024-02-15-preview",
-            azure_endpoint=AZURE_ENDPOINT
-        )
+        self.client = OpenAI()
 
     def count_tokens(self, string: str):
         encoding_name = deepcopy(self.model_id)
